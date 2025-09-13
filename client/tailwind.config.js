@@ -7,14 +7,25 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: '#f0f9ff',
-          500: '#3b82f6',
-          600: '#2563eb',
-          700: '#1d4ed8',
-        }
-      }
+        // A more refined color palette
+        'dark-primary': '#121212',
+        'dark-secondary': '#1E1E1E',
+        'dark-tertiary': '#2A2A2A',
+        'accent-blue': '#3b82f6',
+        'accent-hover': '#2563eb',
+      },
+      animation: {
+        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+      },
+      keyframes: {
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-scrollbar'), // Add this line
+  ],
 }

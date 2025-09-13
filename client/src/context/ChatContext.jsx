@@ -7,9 +7,11 @@ const initialState = {
   chats: [],
   currentChat: null,
   messages: [],
+
   loading: false,
   darkMode: localStorage.getItem('darkMode') === 'true',
-  userId: 'default-user' // In a real app, this would come from authentication
+  isSidebarOpen: true, // Add this line
+  userId: 'default-user' 
 };
 
 function chatReducer(state, action) {
@@ -17,7 +19,7 @@ function chatReducer(state, action) {
     case 'SET_CHATS':
       return { ...state, chats: action.payload };
     case 'SET_CURRENT_CHAT':
-      return { ...state, currentChat: action.payload };
+      return { ...state, currentChat: action.payload, isSidebarOpen: false }; // Close sidebar on chat selection (mobile)
     case 'SET_MESSAGES':
       return { ...state, messages: action.payload };
     case 'ADD_MESSAGE':
@@ -26,8 +28,17 @@ function chatReducer(state, action) {
       return { ...state, loading: action.payload };
     case 'TOGGLE_DARK_MODE':
       return { ...state, darkMode: !state.darkMode };
+    case 'TOGGLE_SIDEBAR': // Add this case
+      return { ...state, isSidebarOpen: !state.isSidebarOpen };
     case 'ADD_CHAT':
       return { ...state, chats: [action.payload, ...state.chats] };
+    case 'UPDATE_CHAT': // Add this new case
+      return {
+        ...state,
+        chats: state.chats.map(chat => 
+          chat._id === action.payload._id ? action.payload : chat
+        )
+      };
     case 'DELETE_CHAT':
       return {
         ...state,
@@ -44,12 +55,10 @@ export function ChatProvider({ children }) {
 
   const API_BASE_URL = 'http://localhost:5000/api';
 
-  // Load chats on mount
   useEffect(() => {
     loadChats();
   }, []);
 
-  // Handle dark mode
   useEffect(() => {
     localStorage.setItem('darkMode', state.darkMode);
     if (state.darkMode) {
@@ -105,6 +114,10 @@ export function ChatProvider({ children }) {
 
       dispatch({ type: 'ADD_MESSAGE', payload: response.data.userMessage });
       dispatch({ type: 'ADD_MESSAGE', payload: response.data.assistantMessage });
+
+        if (response.data.updatedChat) {
+        dispatch({ type: 'UPDATE_CHAT', payload: response.data.updatedChat });
+        }
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
@@ -124,6 +137,11 @@ export function ChatProvider({ children }) {
   const toggleDarkMode = () => {
     dispatch({ type: 'TOGGLE_DARK_MODE' });
   };
+  
+  const toggleSidebar = () => { // Add this function
+    dispatch({ type: 'TOGGLE_SIDEBAR' });
+  };
+
 
   const value = {
     ...state,
@@ -132,7 +150,8 @@ export function ChatProvider({ children }) {
     selectChat,
     sendMessage,
     deleteChat,
-    toggleDarkMode
+    toggleDarkMode,
+    toggleSidebar // Add this to the value
   };
 
   return (
