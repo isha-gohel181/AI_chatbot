@@ -1,3 +1,4 @@
+// client/src/Components/Sidebar.jsx
 import React from 'react';
 import { useChat } from '../context/ChatContext';
 import { PlusIcon, ChatBubbleLeftIcon, TrashIcon } from '@heroicons/react/24/outline';

@@ -1,4 +1,3 @@
-// client/src/App.jsx
 import React from 'react';
 import { ChatProvider, useChat } from './context/ChatContext';
 import Sidebar from './components/Sidebar';
