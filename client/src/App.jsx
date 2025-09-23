@@ -1,9 +1,9 @@
 import React from 'react';
 import { ChatProvider, useChat } from './context/ChatContext';
-import Sidebar from './components/Sidebar';
-import ChatArea from './components/ChatArea';
-import MessageInput from './components/MessageInput';
-import Header from './components/Header';
+import Sidebar from './Components/Sidebar';
+import ChatArea from './Components/ChatArea';
+import MessageInput from './Components/MessageInput';
+import Header from './Components/Header';
 
 function ChatLayout() {
   const { isSidebarOpen, toggleSidebar } = useChat();
